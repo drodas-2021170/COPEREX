@@ -23,6 +23,10 @@ const companySchema = Schema(
         businessEmail:{
             type:String,
             required:[true, 'Business Email is required']
+        },
+        category:{
+            type: Schema.Types.ObjectId,
+            ref:'Category'
         }
     }
 )
