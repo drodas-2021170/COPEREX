@@ -33,11 +33,20 @@ export const getCompany = async(req, res)=>{
 export const getExcelCompanies = async(req,res) =>{
     try {
         const excel = await XlsxPopulate.fromBlankAsync()
-        let company = await Company.find()
+        let company = await Company.find().populate("category", "name");
+
+        const data = company.map(company => [
+            company.name, 
+            company.impactLevel, 
+            company.trayectoryYears, 
+            company.businessPhone, 
+            company.businessEmail, 
+            company.category.name
+        ]);
 
         excel.sheet(0).cell('A1').value([
-            ['Nombre de la Empresa', 'Nivel de impacto', 'Años de trayectoria', 'Telefono', 'Categoria'],
-            [company.name, company.impactLevel, company.trayectoryYears, company.businessPhone, company.businessEmail, company.category]
+            ['Nombre de la Empresa', 'Nivel de impacto', 'Años de trayectoria', 'Telefono', 'Email', 'Category'],
+            ...data
         ])
 
         excel.toFileAsync("./companies2.xlsx")
