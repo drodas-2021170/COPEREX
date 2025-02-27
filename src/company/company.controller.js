@@ -30,6 +30,21 @@ export const getCompany = async(req, res)=>{
     }
 }
 
+
+export const getCompanyCategory = async(req,res) =>{
+    try {
+        let {category} = req.body
+        let companyCategory  = await Company.find({category: category})
+
+        if(companyCategory.length === 0) return res.status(404).send({success: false, message:'No companies found for this category'})
+            return res.send({success: true, message: `Companies found for category: ${companyCategory.category}`, companyCategory, total: companyCategory.length})
+    } catch (err) {
+        console.error(err)
+        return res.status(500).send({success: false, message: 'General Error', err})
+    }
+}
+
+
 export const getExcelCompanies = async(req,res) =>{
     try {
         const excel = await XlsxPopulate.fromBlankAsync()
@@ -48,6 +63,8 @@ export const getExcelCompanies = async(req,res) =>{
             ['Nombre de la Empresa', 'Nivel de impacto', 'Años de trayectoria', 'Telefono', 'Email', 'Category'],
             ...data
         ])
+
+        excel.sheet(0).column('A1').width(30)
 
         excel.toFileAsync("./companies2.xlsx")
         return res.send({success:true, message:'Generating Excel'})

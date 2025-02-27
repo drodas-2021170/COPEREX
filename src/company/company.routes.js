@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { addCompany, getCompany, getExcelCompanies } from "./company.controller.js"
+import { addCompany, getCompany, getCompanyCategory, getExcelCompanies } from "./company.controller.js"
 import { validateJwt } from "../../middlewares/validate.js"
 
 const api = Router()
@@ -8,5 +8,6 @@ api.post('/addCompany',[validateJwt],addCompany)
 api.get('/getCompany',[validateJwt], getCompany)
 
 api.get('/getExcel', getExcelCompanies)
+api.get('/getCompaniesByCategory', getCompanyCategory)
 
 export default api
