@@ -21,9 +21,26 @@ export const addCompany = async(req,res) =>{
 
 export const getCompany = async(req, res)=>{
     try {
+
         let company = await Company.find()
 
-        return res.send({success: true, message:'Companies Found', company})
+        if(company.length === 0) return res.status(404).send({success: false, message:'No companies found '})
+        return res.send({success: true, message:'Companies Found   ', company})
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).send({success:false, message:'General Error', err}) 
+    }
+}
+
+export const getCompanyYears = async(req, res)=>{
+    try {
+        let {trayectoryYears} = req.body
+        let company = await Company.find({trayectoryYears: trayectoryYears})
+
+        if(company.length === 0) return res.status(404).send({success: false, message:'No companies found for this trayectory years'})
+        return res.send({success: true, message:'Companies Found by trayectory Years', company})
+
     } catch (err) {
         console.error(err)
         return res.status(500).send({success:false, message:'General Error', err}) 
@@ -44,6 +61,25 @@ export const getCompanyCategory = async(req,res) =>{
     }
 }
 
+export const getCompanyOrder= async(req,res) =>{
+    try {
+        let {Order} = req.body
+        
+        if(Order === 1){
+            let companyCategory  = await Company.find({category: category})
+    
+            if(companyCategory.length === 0) return res.status(404).send({success: false, message:'No companies found for this category'})
+                return res.send({success: true, message: `Companies found for category: ${companyCategory.category}`, companyCategory, total: companyCategory.length})
+        }else if(Order === 1){
+
+        }else{
+            return res.status(404).send({success: false, message:'Introduce a validate option'})
+        }
+    } catch (err) {
+        console.error(err)
+        return res.status(500).send({success: false, message: 'General Error', err})
+    }
+}
 
 export const getExcelCompanies = async(req,res) =>{
     try {
