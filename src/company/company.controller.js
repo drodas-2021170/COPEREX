@@ -61,10 +61,15 @@ export const getExcelCompanies = async(req,res) =>{
 
         excel.sheet(0).cell('A1').value([
             ['Nombre de la Empresa', 'Nivel de impacto', 'Años de trayectoria', 'Telefono', 'Email', 'Category'],
-            ...data
         ])
+        excel.sheet(0).cell('A2').value([...data])
 
-        excel.sheet(0).column('A1').width(30)
+        excel.sheet(0).column('A').width(30);
+        excel.sheet(0).column('B').width(20);
+        excel.sheet(0).column('C').width(20);
+        excel.sheet(0).column('D').width(20);
+        excel.sheet(0).column('E').width(30);
+        excel.sheet(0).column('F').width(20);
 
         excel.toFileAsync("./companies2.xlsx")
         return res.send({success:true, message:'Generating Excel'})
