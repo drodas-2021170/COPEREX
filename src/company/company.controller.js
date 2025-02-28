@@ -66,12 +66,15 @@ export const getCompanyOrder= async(req,res) =>{
         let {Order} = req.body
         
         if(Order === 1){
-            let companyCategory  = await Company.find({category: category})
+            let companyCategory  = await Company.find().asc()
     
             if(companyCategory.length === 0) return res.status(404).send({success: false, message:'No companies found for this category'})
                 return res.send({success: true, message: `Companies found for category: ${companyCategory.category}`, companyCategory, total: companyCategory.length})
         }else if(Order === 1){
-
+            let companyCategory  = await Company.find().dsc()
+    
+            if(companyCategory.length === 0) return res.status(404).send({success: false, message:'No companies found for this category'})
+                return res.send({success: true, message: `Companies found for category: ${companyCategory.category}`, companyCategory, total: companyCategory.length})
         }else{
             return res.status(404).send({success: false, message:'Introduce a validate option'})
         }
