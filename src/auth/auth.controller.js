@@ -36,7 +36,10 @@ export const login = async(req,res) =>{
         )
     if(!admin) return res.status(404).send({success: false, message:'Admin not found' })
     
-    if(admin && await checkPassword(admin.password, password)){
+    let match  = await checkPassword(admin.password, password)
+
+    if(!match ) return res.status(404).send({success:true, message:'Incorrect password, try again'})
+    if(admin && match){
 
         let loggedAdmin = {
             uid: admin._id,
